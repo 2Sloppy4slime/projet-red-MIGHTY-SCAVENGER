@@ -8,7 +8,7 @@ import (
 
 // fonction :
 func displayInfo(chara Character) {
-	charastrings := []string{"   name : " + chara.name + "   ", "   classe : " + chara.class + "   ", "   level : " + strconv.Itoa(chara.level) + "   ", "   HP : " + strconv.Itoa(chara.hpnow) + "/" + strconv.Itoa(chara.hpmax) + "   "}
+	charastrings := []string{"   name : " + chara.name + "   ", "   class : " + chara.class + "   ", "   level : " + strconv.Itoa(chara.level) + "   ", "   HP : " + strconv.Itoa(chara.hpnow) + "/" + strconv.Itoa(chara.hpmax) + "   "}
 	longeststring := ""
 	for _, word := range charastrings {
 		if len(word) > len(longeststring) {
@@ -32,9 +32,9 @@ func displayInfo(chara Character) {
 }
 
 // fonction :
-func accessInventory(chara Character) {
+func printInventory(chara Character) {
 	fmt.Println("\n  .--.      .-'.      .--.      .--.      .--.      .--.      .`-.      .--.\n:::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\ \n'      `--'      `.-'      `--'      `--'      `--'      `-.'      `--'      `")
-	fmt.Println(asciiArtLettering(" inventory"))
+	fmt.Println(asciiArtLettering(" inventory:"))
 	inventory := chara.inv
 	printmap := make(map[string]int) //map pour stocker la quantité d'items pour afficher un "potion x3"
 	for _, item := range inventory {
@@ -60,7 +60,7 @@ func accessInventory(chara Character) {
 }
 
 func printPot(chara *Character) {
-	fmt.Println("Bu potion, PV : " + strconv.Itoa(chara.hpnow) + " / " + strconv.Itoa(chara.hpmax))
+	fmt.Println("Drunk potion, HP : " + strconv.Itoa(chara.hpnow) + " / " + strconv.Itoa(chara.hpmax))
 }
 
 func asciiArtLettering(s string) string {
@@ -328,6 +328,20 @@ func asciiArtLettering(s string) string {
 			lines[2] += "  _________"
 			lines[3] += " /        /"
 			lines[4] += "/________/ "
+			lines[5] += "           "
+		case '_':
+			lines[0] += "           "
+			lines[1] += "           "
+			lines[2] += "           "
+			lines[3] += "           "
+			lines[4] += " _________ "
+			lines[5] += "/________/ "
+		case ':':
+			lines[0] += "     _     "
+			lines[1] += "    (_)    "
+			lines[2] += "           "
+			lines[3] += "     _     "
+			lines[4] += "    (_)    "
 			lines[5] += "           "
 		default:
 			lines[0] += "        "
