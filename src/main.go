@@ -12,7 +12,7 @@ func main() {
 	player := initCharacter()
 	for !exit {
 		fmt.Scanln(&input)
-		
+
 		menuHandler(input, player)
 	}
 }
@@ -48,7 +48,7 @@ func menuHandler(command string, player Character) {
 			printInventory(player)
 
 		case "exit":
-
+			state = 0
 		default:
 			fmt.Println("unrecognized command: " + command + "    Please try again")
 		}
