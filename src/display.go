@@ -6,6 +6,40 @@ import (
 	"strings"
 )
 
+func commandlist(state int) {
+	switch state {
+	case 0:
+		fmt.Println("main menu : \n - info : see your stats \n - inventory : access the inventory menu \n - quit : leave the game")
+	case 1:
+		fmt.Println("Inventory : \n - view : see the contents of your inventory \n - use (item) : consume an item\n - heal : use a healing potion from your inventory \n - merchant : enter the shop \n - forge : access the forgemasters shop\n - close : exit out of your inventory")
+	case 2:
+		displayshop()
+		fmt.Println("Merchant : \n - buy (item) \n - close : go back to base menu")
+	case 3:
+		fmt.Println("oui")
+	case 4:
+		fmt.Println("oui")
+	case 5:
+		fmt.Println("bjonur")
+	case 6:
+		fmt.Println(asciiArtLettering("you have died"))
+		fmt.Println("     continue? \n - rez : revive with 50%hp \n - quit : leave the game")
+
+	}
+
+}
+func displayshop() {
+	fmt.Println(asciiArtLettering("merchant"))
+	fmt.Println("the merchant has :")
+	for key, value := range shopinv {
+		stock := strconv.Itoa(value)
+		if value == -1 {
+			stock = "inf"
+		}
+		println(key + " : " + strconv.Itoa(shopprice[key]) + "coins" + "(stock : " + stock)
+	}
+}
+
 // fonction :
 func displayInfo(chara Character) {
 	charastrings := []string{"   name : " + chara.name + "   ", "   class : " + chara.class + "   ", "   level : " + strconv.Itoa(chara.level) + "   ", "   HP : " + strconv.Itoa(chara.hpnow) + "/" + strconv.Itoa(chara.hpmax) + "   "}
