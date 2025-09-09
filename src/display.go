@@ -9,9 +9,9 @@ import (
 func commandlist(state int) {
 	switch state {
 	case 0:
-		fmt.Println("main menu : \n - info : see your stats \n - inventory : access the inventory menu \n - quit : leave the game")
+		fmt.Println("main menu : \n - info : see your stats \n - inv : access the inventory menu \n - quit : leave the game")
 	case 1:
-		fmt.Println("Inventory : \n - view : see the contents of your inventory \n - use (item) : consume an item\n - heal : use a healing potion from your inventory \n - merchant : enter the shop \n - forge : access the forgemasters shop\n - close : exit out of your inventory")
+		fmt.Println("Inventory : \n - view : see the contents of your inventory \n - use (item) : consume an item\n - heal : use a healing potion from your inventory \n - shop : enter the shop \n - forge : access the forgemasters shop\n - close : exit out of your inventory")
 	case 2:
 		displayshop()
 		fmt.Println("Merchant : \n - buy (item) \n - close : go back to base menu")
@@ -42,7 +42,7 @@ func displayshop() {
 
 // fonction :
 func displayInfo(chara Character) {
-	charastrings := []string{"   name : " + chara.name + "   ", "   class : " + chara.class + "   ", "   level : " + strconv.Itoa(chara.level) + "   ", "   HP : " + strconv.Itoa(chara.hpnow) + "/" + strconv.Itoa(chara.hpmax) + "   "}
+	charastrings := []string{"   name : " + chara.name + "   ", "   class : " + chara.class + "   ", "   level : " + strconv.Itoa(chara.level) + "   ", "   HP : " + strconv.Itoa(chara.hpnow) + "/" + strconv.Itoa(chara.hpmax) + "   ", "   Money : " + strconv.Itoa(chara.money) + "   "}
 	longeststring := ""
 	for _, word := range charastrings {
 		if len(word) > len(longeststring) {
@@ -62,6 +62,7 @@ func displayInfo(chara Character) {
 	fmt.Println(" \\_ |" + charastrings[1] + "\\.") //classe
 	fmt.Println("    |" + charastrings[2] + "\\.")  //level
 	fmt.Println("    |" + charastrings[3] + "\\.")  //pv
+	fmt.Println("    |" + charastrings[4] + "\\.")  //money
 	fmt.Println("    |" + repeat + "\n" + "    |   " + strings.Repeat("_", width-3) + "|___\n    |  /" + strings.Repeat(" ", width) + "/.\n    \\_/" + strings.Repeat("_", width) + "/.")
 }
 
@@ -70,22 +71,12 @@ func printInventory(chara Character) {
 	fmt.Println("\n  .--.      .-'.      .--.      .--.      .--.      .--.      .`-.      .--.\n:::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\ \n'      `--'      `.-'      `--'      `--'      `--'      `-.'      `--'      `")
 	fmt.Println(asciiArtLettering(" inventory:"))
 	inventory := chara.inv
-	printmap := make(map[string]int) //map pour stocker la quantité d'items pour afficher un "potion x3"
-	for _, item := range inventory {
-		_, exists := printmap[item]
-
-		if exists {
-			printmap[item]++
-		} else {
-			printmap[item] = 1
-		}
-	}
-	for key, value := range printmap {
+	for key, value := range inventory {
 		letter := ""
 		if value > 1 {
-			letter = asciiArtLettering("-" + key + " x" + strconv.Itoa(value))
+			letter = "-" + key + " x" + strconv.Itoa(value)
 		} else {
-			letter = asciiArtLettering("-" + key)
+			letter = "-" + key
 		}
 		fmt.Println(" ")
 		fmt.Println(letter)

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"slices"
 )
 
 var maxinvslots = 10
@@ -60,6 +59,8 @@ func characterCreation() Character {
 		case "dwarf":
 			health = 120
 			classchosen = true
+		default:
+			fmt.Println("what the fuck is that race I don't know it")
 		}
 	}
 	fmt.Println("Very well " + name + " the " + class + "... Good luck")
@@ -124,7 +125,7 @@ func Useitem(chara *Character, item string) {
 }
 
 func takePot(chara *Character) {
-	if chara.inv["potion"] >0 {
+	if chara.inv["potion"] > 0 {
 		removeitem(chara, "potion")
 		if chara.hpnow+50 >= chara.hpmax {
 			chara.hpnow = chara.hpmax
@@ -137,5 +138,19 @@ func takePot(chara *Character) {
 
 func Spellbook(chara *Character) {
 
-	chara.inv = append(chara.inv, "fireball")
+	chara.skill = append(chara.skill, "fireball")
+}
+
+func equiparmor(item string, chara *Character) {
+	switch item {
+	case "adventurers hat":
+		chara.armor.headslot += 10
+		chara.hpmax += 10
+	case "adventurers tunic":
+		chara.armor.chestslot += 25
+		chara.hpmax += 10
+	case "adventurers boots":
+		chara.armor.feetslot += 15
+		chara.hpmax += 10
+	}
 }
