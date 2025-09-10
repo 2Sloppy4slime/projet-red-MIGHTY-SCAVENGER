@@ -97,26 +97,29 @@ func removeitem(chara *Character, item string) {
 	}
 }
 
-func additem(chara *Character, item string) {
+func (chara *Character) additem(item string) {
 	if !IsInvFull(chara) {
 		if chara.inv[item] == 0 {
 			chara.inv[item] = 1
+			fmt.Println("new added!")
 		} else {
 			chara.inv[item] += 1
+			fmt.Println("added!")
 		}
 	} else {
 		fmt.Println("you're carrying too much stuff, item lost")
 	}
 }
 
-func Useitem(chara *Character, item string) {
+func (chara *Character) Useitem(item string) {
 	switch item {
 	case "potion":
-		takePot(chara)
+		chara.takePot()
+		
 	case "poisonpot":
 		Poisonpot(chara)
 	case "spellbook":
-		Spellbook(chara)
+		chara.Spellbook()
 	case "upgradeinv":
 		upgradeInventorySlot()
 	default:
@@ -124,7 +127,7 @@ func Useitem(chara *Character, item string) {
 	}
 }
 
-func takePot(chara *Character) {
+func (chara *Character) takePot() {
 	if chara.inv["potion"] > 0 {
 		removeitem(chara, "potion")
 		if chara.hpnow+50 >= chara.hpmax {
@@ -136,12 +139,12 @@ func takePot(chara *Character) {
 	}
 }
 
-func Spellbook(chara *Character) {
+func (chara *Character) Spellbook() {
 
 	chara.skill = append(chara.skill, "fireball")
 }
 
-func equiparmor(item string, chara *Character) {
+func (chara *Character) equiparmor(item string) {
 	switch item {
 	case "adventurers hat":
 		chara.armor.headslot += 10
@@ -153,4 +156,8 @@ func equiparmor(item string, chara *Character) {
 		chara.armor.feetslot += 15
 		chara.hpmax += 10
 	}
+}
+
+func (chara *Character) GetInv() *map[string]int {
+	return &chara.inv
 }

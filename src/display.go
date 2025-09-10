@@ -39,6 +39,11 @@ func displayshop() {
 		println(key + " : " + strconv.Itoa(shopprice[key]) + "coins" + "(stock : " + stock)
 	}
 }
+func forgingtext() {
+	fmt.Println("the forgemaster can make you : \n - \"adventurers hat\" : +10HP (1 crow feather,1 boar hide)\n - \"adventurers tunic\" : +25HP (2 wolf fur,1 troll skin) \n - \"adventurers boots\" : +10HP (1 wolf fur,1 boar hide)")
+	fmt.Println("type the name of the equipment to forge it")
+}
+func buyingtext() { fmt.Println("oui") }
 
 // fonction :
 func displayInfo(chara Character) {

@@ -17,8 +17,13 @@ func main() {
 	input := ""
 	player := characterCreation()
 	for !exit {
-		fmt.Println(" \n\n ")
-		fmt.Println("you are in the " + menuname + " menu (input \"list\" to get a list of valid commands)")
+		if !forging && !buying {
+			fmt.Println("you are in the " + menuname + " menu (input \"list\" to get a list of valid commands)")
+		} else if forging {
+			forgingtext()
+		} else {
+			buyingtext()
+		}
 		fmt.Scanln(&input)
 		commands := strings.Split(input, " ")
 		for _, value := range commands {
@@ -32,6 +37,14 @@ func menuHandler(command string, player Character) {
 	if command == "list" {
 		commandlist(state)
 		return
+	}
+	if command == "quit" {
+		fmt.Println(asciiArtLettering("see you when"))
+		time.Sleep(1500 * time.Millisecond)
+		fmt.Println(asciiArtLettering("you run out"))
+		time.Sleep(1500 * time.Millisecond)
+		fmt.Println(asciiArtLettering("of food again"))
+		exit = true
 	}
 	switch state {
 	case 0:
@@ -51,14 +64,6 @@ func menuHandler(command string, player Character) {
 			state = 3
 			menuname = "forge"
 
-		case "quit", "uit":
-			fmt.Println(asciiArtLettering("see you when"))
-			time.Sleep(1500 * time.Millisecond)
-			fmt.Println(asciiArtLettering("you run out"))
-			time.Sleep(1500 * time.Millisecond)
-			fmt.Println(asciiArtLettering("of food again"))
-			exit = true
-
 		default:
 			fmt.Println("unrecognized command: " + command + "    Please try again")
 		}
@@ -69,7 +74,7 @@ func menuHandler(command string, player Character) {
 			printInventory(player)
 
 		case "heal", "eal":
-			takePot(&player)
+			player.takePot()
 
 		case "close", "lose":
 			state = 0
@@ -87,7 +92,7 @@ func menuHandler(command string, player Character) {
 	case 2: //shop
 		if buying {
 			if shopinv[command] != 0 {
-				buyItem(command, &player)
+				player.buyItem(command)
 				buying = false
 			}
 		} else {
@@ -106,16 +111,21 @@ func menuHandler(command string, player Character) {
 	case 3: //forge
 		if forging {
 			if forgelist[command] != 0 {
-				buyItem(command, &player)
+				player.forgeItem(command)
 				buying = false
 			}
 		} else {
 			switch command {
 			case "make", "ake":
 				printInventory(player)
+			case "close", "lose":
+				state = 0
+				menuname = "main"
 			default:
 				fmt.Println("unrecognized command: " + command + "    Please try again")
+
 			}
+
 		}
 	case 4: //combat
 		switch command {
@@ -136,7 +146,7 @@ func menuHandler(command string, player Character) {
 			printInventory(player)
 
 		case "heal", "eal":
-			takePot(&player)
+			player.takePot()
 
 		case "close", "lose":
 			state = 4
