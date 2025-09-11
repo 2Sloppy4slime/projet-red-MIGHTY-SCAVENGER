@@ -27,3 +27,23 @@ func goblinPattern(goblin *Monster, player *Character, turnnumber int) {
 	}
 
 }
+
+func (chara *Character) characterTurn(enemy *Monster) {
+	turnnumber := 0
+	for enemy.hpnow > 0 {
+		turnnumber++
+		input := ""
+		acted := false
+		for !acted {
+			fmt.Println("a " + enemy.name + strconv.Itoa(enemy.hpnow) + " / " + strconv.Itoa(enemy.hpmax) + " stands before you")
+			fmt.Scanln(&input)
+			switch input {
+			case "atk" :
+
+			default:
+				fmt.Println("unrecognized command, try again or type \"list\" to see a list of actions")
+			}
+		}
+		goblinPattern(enemy, chara, turnnumber)
+	}
+}

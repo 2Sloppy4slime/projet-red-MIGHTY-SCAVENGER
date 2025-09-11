@@ -8,7 +8,7 @@ import (
 )
 
 var exit = false
-var state = 0 //0 = base, 1 = inventaire, 2 = shop, 3 = forgeron, 4 = combat, 5 = combat inv, 6 = dead
+var state = 0 //0 = base, 1 = inventaire, 2 = shop, 3 = forgeron, 4 = quest, 6 = dead
 var buying = false
 var forging = false
 var menuname = "main"
@@ -127,12 +127,8 @@ func menuHandler(command string, player Character) {
 			}
 
 		}
-	case 4: //combat
+	case 4: //quest
 		switch command {
-		case "menu":
-			printInventory(player)
-		case "atk":
-			printInventory(player)
 		case "inv":
 			state = 5
 			menuname = "combat inventory"
@@ -140,21 +136,7 @@ func menuHandler(command string, player Character) {
 		default:
 			fmt.Println("unrecognized command: " + command + "    Please try again")
 		}
-	case 5: //combat inv
-		switch command {
-		case "view", "iew":
-			printInventory(player)
 
-		case "heal", "eal":
-			player.takePot()
-
-		case "close", "lose":
-			state = 4
-			menuname = "combat"
-		default:
-			fmt.Println("unrecognized command: " + command + "    Please try again")
-
-		}
 	case 6:
 		switch command {
 		case "rez":
