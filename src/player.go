@@ -115,7 +115,7 @@ func (chara *Character) Useitem(item string) {
 	switch item {
 	case "potion":
 		chara.takePot()
-		
+
 	case "poisonpot":
 		Poisonpot(chara)
 	case "spellbook":
@@ -160,4 +160,8 @@ func (chara *Character) equiparmor(item string) {
 
 func (chara *Character) GetInv() *map[string]int {
 	return &chara.inv
+}
+func (chara *Character) attack(enemy *Monster) {
+	enemy.hpnow -= 5
+	fmt.Println("AAAAAAAAAAA")
 }

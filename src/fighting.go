@@ -27,23 +27,30 @@ func goblinPattern(goblin *Monster, player *Character, turnnumber int) {
 	}
 
 }
-
-func (chara *Character) characterTurn(enemy *Monster) {
+func (chara *Character) characterturn(enemy *Monster) {
+	input := ""
+	acted := false
+	for !acted {
+		fmt.Println("a " + enemy.name + strconv.Itoa(enemy.hpnow) + " / " + strconv.Itoa(enemy.hpmax) + " stands before you")
+		fmt.Scanln(&input)
+		switch input {
+		case "atk":
+			chara.attack(enemy)
+			acted = true
+		default:
+			fmt.Println("unrecognized command, try again or type \"list\" to see a list of actions")
+		}
+	}
+}
+func trainingFight(chara *Character, enemy *Monster) {
 	turnnumber := 0
 	for enemy.hpnow > 0 {
 		turnnumber++
-		input := ""
-		acted := false
-		for !acted {
-			fmt.Println("a " + enemy.name + strconv.Itoa(enemy.hpnow) + " / " + strconv.Itoa(enemy.hpmax) + " stands before you")
-			fmt.Scanln(&input)
-			switch input {
-			case "atk" :
-
-			default:
-				fmt.Println("unrecognized command, try again or type \"list\" to see a list of actions")
-			}
+		fmt.Println("turn n° " + strconv.Itoa(turnnumber))
+		chara.characterturn(enemy)
+		if enemy.hpnow > 0 {
+			goblinPattern(enemy, chara, turnnumber)
 		}
-		goblinPattern(enemy, chara, turnnumber)
+		IsDead(chara)
 	}
 }

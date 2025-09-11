@@ -64,6 +64,10 @@ func menuHandler(command string, player Character) {
 			state = 3
 			menuname = "forge"
 
+		case "train", "rain":
+			enemy := initGoblin()
+			trainingFight(&player, &enemy)
+
 		default:
 			fmt.Println("unrecognized command: " + command + "    Please try again")
 		}
