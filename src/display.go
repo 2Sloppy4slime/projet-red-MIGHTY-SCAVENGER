@@ -8,20 +8,20 @@ import (
 
 func commandlist(state int) {
 	switch state {
-	case 0:
-		fmt.Println("main menu : \n - info : see your stats \n - inv : access the inventory menu \n - quit : leave the game")
-	case 1:
-		fmt.Println("Inventory : \n - view : see the contents of your inventory \n - use (item) : consume an item\n - heal : use a healing potion from your inventory \n - shop : enter the shop \n - forge : access the forgemasters shop\n - close : exit out of your inventory")
-	case 2:
+	case 0: //main
+		fmt.Println("main menu : \n - info : see your stats \n - inv : access the inventory menu \n shop : enter the shop \n forge : enter the forge\n- quit : leave the game")
+	case 1: //inv
+		fmt.Println("Inventory : \n - view : see the contents of your inventory \n - use (item) : consume an item\n - heal : use a healing potion from your inventory \n - shop : enter the shop \n - forge : enter the forge\n - close : exit out of your inventory \n- quit : leave the game")
+	case 2: //shop
 		displayshop()
-		fmt.Println("Merchant : \n - buy (item) \n - close : go back to base menu")
-	case 3:
+		fmt.Println("Merchant : \n - buy (item) \n - close : go back to base menu \n- quit : leave the game")
+	case 3: //forge
 		fmt.Println("oui")
 	case 4:
 		fmt.Println("oui")
 	case 5:
 		fmt.Println("bjonur")
-	case 6:
+	case 6: //died
 		fmt.Println(asciiArtLettering("you have died"))
 		fmt.Println("     continue? \n - rez : revive with 50%hp \n - quit : leave the game")
 
@@ -36,8 +36,9 @@ func displayshop() {
 		if value == -1 {
 			stock = "inf"
 		}
-		println(key + " : " + strconv.Itoa(shopprice[key]) + "coins" + "(stock : " + stock)
+		println(key + " : " + strconv.Itoa(shopprice[key]) + "coins" + "(stock : " + stock + " )")
 	}
+	fmt.Println("\n type the name of the item you want to buy : ")
 }
 func forgingtext() {
 	fmt.Println("the forgemaster can make you : \n - \"adventurers hat\" : +10HP (1 crow feather,1 boar hide)\n - \"adventurers tunic\" : +25HP (2 wolf fur,1 troll skin) \n - \"adventurers boots\" : +10HP (1 wolf fur,1 boar hide)")
@@ -46,7 +47,7 @@ func forgingtext() {
 func buyingtext() { fmt.Println("oui") }
 
 // fonction :
-func displayInfo(chara Character) {
+func displayInfo(chara *Character) {
 	charastrings := []string{"   name : " + chara.name + "   ", "   class : " + chara.class + "   ", "   level : " + strconv.Itoa(chara.level) + "   ", "   HP : " + strconv.Itoa(chara.hpnow) + "/" + strconv.Itoa(chara.hpmax) + "   ", "   Money : " + strconv.Itoa(chara.money) + "   "}
 	longeststring := ""
 	for _, word := range charastrings {
@@ -72,7 +73,7 @@ func displayInfo(chara Character) {
 }
 
 // fonction :
-func printInventory(chara Character) {
+func printInventory(chara *Character) {
 	fmt.Println("\n  .--.      .-'.      .--.      .--.      .--.      .--.      .`-.      .--.\n:::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\::::::::.\\ \n'      `--'      `.-'      `--'      `--'      `--'      `-.'      `--'      `")
 	fmt.Println(asciiArtLettering(" inventory:"))
 	inventory := chara.inv

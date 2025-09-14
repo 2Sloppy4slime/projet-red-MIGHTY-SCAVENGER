@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"strconv"
+	"time"
 )
 
 var maxinvslots = 10
@@ -16,6 +18,7 @@ type Character struct {
 	inv   map[string]int
 	skill []string
 	armor Equipment
+	atk   int
 }
 
 type Equipment struct {
@@ -65,9 +68,11 @@ func characterCreation() Character {
 	}
 	fmt.Println("Very well " + name + " the " + class + "... Good luck")
 
-	return Character{name, class, 1, health, health / 2, 100, map[string]int{"potion": 3}, []string{"coupdepoing"}, Equipment{0, 0, 0}}
+	return Character{name, class, 1, health, health / 2, 100, map[string]int{"potion": 3}, []string{"coupdepoing"}, Equipment{0, 0, 0}, 5}
 }
-
+func (chara *Character) getHealth() *int {
+	return &chara.hpnow
+}
 func upgradeInventorySlot() {
 	if maxinvslots < 40 {
 		maxinvslots += 10
@@ -84,7 +89,15 @@ func IsInvFull(chara *Character) bool {
 
 func IsDead(chara *Character) {
 	if chara.hpnow < 0 {
-		state = 6
+		commandlist(6)
+		command := ""
+		fmt.Scanln(&command)
+		switch command {
+		case "rez":
+			chara.hpnow = chara.hpmax / 2
+		case "quit":
+			exit = true
+		}
 	}
 }
 
@@ -128,12 +141,15 @@ func (chara *Character) Useitem(item string) {
 }
 
 func (chara *Character) takePot() {
+	health := chara.getHealth()
 	if chara.inv["potion"] > 0 {
 		removeitem(chara, "potion")
 		if chara.hpnow+50 >= chara.hpmax {
-			chara.hpnow = chara.hpmax
+			fmt.Println("drink")
+			*health = chara.hpmax
 		} else {
-			chara.hpnow += 50
+			fmt.Println("drink")
+			*health += 50
 		}
 		printPot(chara)
 	}
@@ -161,7 +177,26 @@ func (chara *Character) equiparmor(item string) {
 func (chara *Character) GetInv() *map[string]int {
 	return &chara.inv
 }
+
 func (chara *Character) attack(enemy *Monster) {
 	enemy.hpnow -= 5
-	fmt.Println("AAAAAAAAAAA")
+	fmt.Println(chara.name + " deals " + strconv.Itoa(chara.atk) + " dmg to " + enemy.name)
+}
+
+func Poisonpot(chara *Character) {
+	chara.hpnow -= 10
+	fmt.Println("hp left :" + strconv.Itoa(chara.hpnow) + " / " + strconv.Itoa(chara.hpmax))
+	IsDead(chara)
+	time.Sleep(1 * time.Second)
+
+	chara.hpnow -= 10
+	fmt.Println("hp left :" + strconv.Itoa(chara.hpnow) + " / " + strconv.Itoa(chara.hpmax))
+	IsDead(chara)
+	time.Sleep(1 * time.Second)
+
+	chara.hpnow -= 10
+	fmt.Println("hp left :" + strconv.Itoa(chara.hpnow) + " / " + strconv.Itoa(chara.hpmax))
+	IsDead(chara)
+	time.Sleep(1 * time.Second)
+
 }
