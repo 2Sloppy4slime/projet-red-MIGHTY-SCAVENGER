@@ -141,6 +141,8 @@ func (chara *Character) Useitem(item string) {
 		chara.equiparmor("adventurers_tunic")
 	case "adventurers_boots":
 		chara.equiparmor("adventurers_boots")
+	case "inv_upgrade":
+		upgradeInventorySlot()
 	default:
 		fmt.Println("item not found, try again")
 	}
