@@ -135,6 +135,12 @@ func (chara *Character) Useitem(item string) {
 		chara.Spellbook()
 	case "upgradeinv":
 		upgradeInventorySlot()
+	case "adventurers_hat":
+		chara.equiparmor("adventurers_hat")
+	case "adventurers_tunic":
+		chara.equiparmor("adventurers_tunic")
+	case "adventurers_boots":
+		chara.equiparmor("adventurers_boots")
 	default:
 		fmt.Println("item not found, try again")
 	}
