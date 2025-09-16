@@ -137,10 +137,13 @@ func (chara *Character) Useitem(item string) {
 		upgradeInventorySlot()
 	case "adventurers_hat":
 		chara.equiparmor("adventurers_hat")
+		removeitem(chara,"adventurers_hat")
 	case "adventurers_tunic":
 		chara.equiparmor("adventurers_tunic")
+		removeitem(chara,"adventurers_tunic")
 	case "adventurers_boots":
 		chara.equiparmor("adventurers_boots")
+		removeitem(chara,"adventurers_boots")
 	case "inv_upgrade":
 		upgradeInventorySlot()
 	default:

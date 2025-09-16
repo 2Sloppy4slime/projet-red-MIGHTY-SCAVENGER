@@ -13,6 +13,7 @@ var forging = false
 var menuname = "main"
 
 func main() {
+	displayenemysprite(4)
 	legacy := false
 	a := ""
 	choselegacy := false
@@ -89,6 +90,9 @@ func menuHandler(command string, player *Character) {
 		case "train", "rain":
 			enemy := initGoblin()
 			trainingFight(player, &enemy)
+		
+		case "whoarethey":
+			fmt.Println("ABBA et spielberg")
 
 		default:
 			fmt.Println("unrecognized command: " + command + "    Please try again")

@@ -33,7 +33,6 @@ var quitfight bool = false
 func (chara *Character) characterturn(enemy *Monster) {
 	input := ""
 	acted := false
-	ininv := false
 	fmt.Println("a " + enemy.name + strconv.Itoa(enemy.hpnow) + " / " + strconv.Itoa(enemy.hpmax) + " stands before you")
 	for !acted {
 
@@ -47,7 +46,7 @@ func (chara *Character) characterturn(enemy *Monster) {
 			chara.attack(enemy)
 			acted = true
 		case "inv":
-			combatinv()
+			chara.combatinv(enemy,&acted)
 
 		default:
 			fmt.Println("unrecognized command, try again or type \"list\" to see a list of actions")
@@ -70,7 +69,32 @@ func trainingFight(chara *Character, enemy *Monster) {
 		IsDead(chara)
 	}
 }
-func (chara *Character) combatinv(enemy *Monster) {
+func (chara *Character) combatinv(enemy *Monster, actionbool *bool) {
 	printInventory(chara)
-	
+	input := ""
+	closeinv := false
+	for !closeinv {
+		fmt.Scanln(&input)
+		switch input {
+		case "list":
+			fmt.Println(" -use : use an item \n -close : close your inv ")
+		case "close":
+			closeinv = true
+		case "use":
+			used:= false
+			item := ""
+			for !used {
+				fmt.Scanln(&item)
+				if chara.inv[item] > 0 {
+					chara.Useitem(item)
+					*actionbool = true
+				}
+			}
+		case "":
+			fmt.Println("input not recieved, how the fuck did you do that")
+		default:
+			fmt.Println("invalid input recieved, type \"list\" to get a list of valid commands")
+		}
+	}
+
 }
