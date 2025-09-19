@@ -129,7 +129,7 @@ func IsDead(chara *Character) {
 
 // fonction: retire un objet de l'inventaire
 func removeitem(chara *Character, item string) {
-	for i, _ := range chara.inv {
+	for i := range chara.inv {
 		if i == item {
 			chara.inv[item] -= 1
 		}
