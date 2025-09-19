@@ -9,7 +9,7 @@ import (
 func commandlist(state int) {
 	switch state {
 	case 0: //main
-		fmt.Println("main menu : \n - info : see your stats \n - inv : access the inventory menu \n shop : enter the shop \n forge : enter the forge\n- quit : leave the game \n whoarethey : mission du projet red!")
+		fmt.Println("main menu : \n - info : see your stats \n - inv : access the inventory menu \n - shop : enter the shop \n - forge : enter the forge\n - train : go fight a simple goblin \n - quit : leave the game \n whoarethey : mission du projet red!")
 	case 1: //inv
 		fmt.Println("Inventory : \n - view : see the contents of your inventory \n - use (item) : consume an item\n - heal : use a healing potion from your inventory \n - shop : enter the shop \n - forge : enter the forge\n - close : exit out of your inventory \n- quit : leave the game")
 	case 2: //shop

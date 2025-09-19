@@ -11,18 +11,18 @@ var spellprice = map[string]int{"fireball": 50, "coupdepoing": 10}
 var maxinvslots = 10
 
 type Character struct {
-	name  string
-	class string
-	level int
-	hpmax int
-	hpnow int
-	money int
-	inv   map[string]int
-	skill []string
-	armor Equipment
-	atk   int
-	spd   int
-	exp   int
+	name    string
+	class   string
+	level   int
+	hpmax   int
+	hpnow   int
+	money   int
+	inv     map[string]int
+	skill   []string
+	armor   Equipment
+	atk     int
+	spd     int
+	exp     int
 	mananow int
 	manamax int
 }
@@ -94,7 +94,7 @@ func characterCreation() Character {
 	}
 	fmt.Println("Very well " + name + " the " + class + "... Good luck")
 
-	return Character{name, class, 1, health, health / 2, 100, map[string]int{"potion": 3}, []string{"coupdepoing"}, Equipment{0, 0, 0}, atk, spd, 3,100,100}
+	return Character{name, class, 1, health, health / 2, 100, map[string]int{"potion": 3}, []string{"coupdepoing"}, Equipment{0, 0, 0}, atk, spd, 3, 100, 100}
 }
 func (chara *Character) getHealth() *int {
 	return &chara.hpnow
@@ -150,13 +150,13 @@ func (chara *Character) additem(item string) {
 	}
 }
 
-func (chara *Character) Useitem(item string) {
+func (chara *Character) Useitem(item string, victim *Monster) {
 	switch item {
 	case "potion":
 		chara.takePot()
 
 	case "poisonpot":
-		Poisonpot(chara)
+		Poisonpot(victim)
 	case "spellbook":
 		chara.Spellbook()
 	case "upgradeinv":
@@ -226,20 +226,17 @@ func (chara *Character) attack(enemy *Monster) {
 	fmt.Println(chara.name + " deals " + strconv.Itoa(chara.atk) + " dmg to " + enemy.name)
 }
 
-func Poisonpot(chara *Character) {
-	chara.hpnow -= 10
-	fmt.Println("hp left :" + strconv.Itoa(chara.hpnow) + " / " + strconv.Itoa(chara.hpmax))
-	IsDead(chara)
+func Poisonpot(enemy *Monster) {
+	enemy.hpnow -= 10
+	fmt.Println("hp left :" + strconv.Itoa(enemy.hpnow) + " / " + strconv.Itoa(enemy.hpmax))
 	time.Sleep(1 * time.Second)
 
-	chara.hpnow -= 10
-	fmt.Println("hp left :" + strconv.Itoa(chara.hpnow) + " / " + strconv.Itoa(chara.hpmax))
-	IsDead(chara)
+	enemy.hpnow -= 10
+	fmt.Println("hp left :" + strconv.Itoa(enemy.hpnow) + " / " + strconv.Itoa(enemy.hpmax))
 	time.Sleep(1 * time.Second)
 
-	chara.hpnow -= 10
-	fmt.Println("hp left :" + strconv.Itoa(chara.hpnow) + " / " + strconv.Itoa(chara.hpmax))
-	IsDead(chara)
+	enemy.hpnow -= 10
+	fmt.Println("hp left :" + strconv.Itoa(enemy.hpnow) + " / " + strconv.Itoa(enemy.hpmax))
 	time.Sleep(1 * time.Second)
 
 }
@@ -293,5 +290,7 @@ func (chara *Character) experience(n int) {
 			}
 		}
 
+	} else {
+		chara.exp += n
 	}
 }

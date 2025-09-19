@@ -109,10 +109,13 @@ func trainingFight(chara *Character, enemy *Monster) {
 		}
 
 	}
-	fmt.Println("\n you have defeated the training goblin! mana has been restored")
+
+	fmt.Println("----------------------------------\n you have defeated the training goblin! mana has been restored")
 	chara.mananow = chara.manamax
 	chara.experience(3)
 	fmt.Println("+3exp (" + strconv.Itoa(chara.exp) + "/" + strconv.Itoa(chara.level*10) + ")")
+	chara.money += 10
+	fmt.Println("+10 gold (you have " + strconv.Itoa(chara.money) + " gold now")
 
 }
 func (chara *Character) combatinv(enemy *Monster, actionbool *bool) {
@@ -132,8 +135,9 @@ func (chara *Character) combatinv(enemy *Monster, actionbool *bool) {
 			for !used {
 				fmt.Scanln(&item)
 				if chara.inv[item] > 0 {
-					chara.Useitem(item)
+					chara.Useitem(item, enemy)
 					*actionbool = true
+					used = true
 				}
 			}
 		case "":

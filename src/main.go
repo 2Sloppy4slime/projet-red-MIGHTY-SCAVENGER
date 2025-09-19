@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 	"time"
 )
 
@@ -35,11 +34,8 @@ func main() {
 				buyingtext()
 			}
 			fmt.Scanln(&input)
-			commands := strings.Split(input, " ")
-			for _, value := range commands {
-				fmt.Println(value)
-				menuHandler(value, &player)
-			}
+			menuHandler(input, &player)
+
 		}
 	}
 }
@@ -66,18 +62,23 @@ func menuHandler(command string, player *Character) {
 
 		case "inv", "nv":
 			state = 1
+
 			menuname = "inventory"
 
 		case "shop", "hop":
 			state = 2
+			asciiArtLettering("merchant")
 			menuname = "shop"
 
 		case "forge", "orge":
 			state = 3
+			asciiArtLettering("forge")
 			menuname = "forge"
 
 		case "train", "rain":
 			enemy := initGoblin()
+			asciiArtLettering("fight")
+			displayenemysprite(1)
 			trainingFight(player, &enemy)
 
 		case "whoarethey":
@@ -99,11 +100,23 @@ func menuHandler(command string, player *Character) {
 			state = 0
 			menuname = "main"
 		case "shop", "hop":
+			asciiArtLettering("merchant")
 			state = 2
 			menuname = "shop"
 		case "forge", "orge":
+			asciiArtLettering("forge")
 			state = 3
 			menuname = "forge"
+		case "use":
+			used := false
+			item := ""
+			for !used {
+				fmt.Scanln(&item)
+				if player.inv[item] > 0 {
+					player.Useitem(item,&Monster{})
+					used = true
+				}
+			}
 		default:
 			fmt.Println("unrecognized command: " + command + "    Please try again")
 		}
