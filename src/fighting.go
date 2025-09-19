@@ -10,10 +10,11 @@ type Monster struct {
 	hpnow int
 	hpmax int
 	atk   int
+	spd   int
 }
 
 func initGoblin() Monster {
-	return Monster{"Goblin", 40, 40, 5}
+	return Monster{"Goblin", 40, 40, 5, 5}
 }
 func goblinPattern(goblin *Monster, player *Character, turnnumber int) {
 	if turnnumber%3 == 0 {
@@ -40,14 +41,37 @@ func (chara *Character) characterturn(enemy *Monster) {
 		switch input {
 		case "close":
 			quitfight = true
+			acted = true
 		case "list":
-			fmt.Println("atk : Attack \n inv : Acces inv")
+			fmt.Println(" - atk : Attack \n - inv : Acces inv \n - spell : cast a spell \n - close : exit out of the fight")
 		case "atk":
 			chara.attack(enemy)
 			acted = true
 		case "inv":
-			chara.combatinv(enemy,&acted)
+			chara.combatinv(enemy, &acted)
+		case "spell":
+			input := ""
+			spelled := false
+			for !spelled {
+				chara.displayspells()
+				fmt.Scanln(&input)
+				if input == "close" {
+					spelled = true
+				}
+				for _, spell := range chara.skill {
 
+					if input == spell {
+						if chara.mananow >= spellprice[spell] {
+							enemy.hpnow -= spelldmg[spell]
+							chara.mananow -= spellprice[spell]
+							spelled = true
+							acted = true
+						} else {
+							fmt.Println("not enough mana for spell, try again")
+						}
+					}
+				}
+			}
 		default:
 			fmt.Println("unrecognized command, try again or type \"list\" to see a list of actions")
 		}
@@ -55,19 +79,41 @@ func (chara *Character) characterturn(enemy *Monster) {
 }
 func trainingFight(chara *Character, enemy *Monster) {
 	turnnumber := 0
+	youfirst := false
+	if chara.spd >= enemy.spd {
+		youfirst = true
+	}
 	for enemy.hpnow > 0 {
 		turnnumber++
-		fmt.Println("turn n° " + strconv.Itoa(turnnumber))
-		chara.characterturn(enemy)
-		if quitfight {
-			quitfight = false
-			return
+		fmt.Println("-----------------------------\n turn n° " + strconv.Itoa(turnnumber) + "\n-----------------------------")
+		if youfirst {
+			chara.characterturn(enemy)
+			if quitfight {
+				quitfight = false
+				return
+			}
+			if enemy.hpnow > 0 {
+				goblinPattern(enemy, chara, turnnumber)
+			}
+			IsDead(chara)
+		} else {
+			if enemy.hpnow > 0 {
+				goblinPattern(enemy, chara, turnnumber)
+			}
+			chara.characterturn(enemy)
+			if quitfight {
+				quitfight = false
+				return
+			}
+			IsDead(chara)
 		}
-		if enemy.hpnow > 0 {
-			goblinPattern(enemy, chara, turnnumber)
-		}
-		IsDead(chara)
+
 	}
+	fmt.Println("\n you have defeated the training goblin! mana has been restored")
+	chara.mananow = chara.manamax
+	chara.experience(3)
+	fmt.Println("+3exp (" + strconv.Itoa(chara.exp) + "/" + strconv.Itoa(chara.level*10) + ")")
+
 }
 func (chara *Character) combatinv(enemy *Monster, actionbool *bool) {
 	printInventory(chara)
@@ -81,7 +127,7 @@ func (chara *Character) combatinv(enemy *Monster, actionbool *bool) {
 		case "close":
 			closeinv = true
 		case "use":
-			used:= false
+			used := false
 			item := ""
 			for !used {
 				fmt.Scanln(&item)

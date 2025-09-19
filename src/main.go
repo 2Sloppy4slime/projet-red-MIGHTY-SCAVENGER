@@ -2,38 +2,27 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"time"
 )
 
 var exit = false
+
 var state = 0 //0 = base, 1 = inventaire, 2 = shop, 3 = forgeron, 4 = quest, 6 = dead
 var buying = false
 var forging = false
 var menuname = "main"
 
 func main() {
-	displayenemysprite(4)
-	legacy := false
-	a := ""
-	choselegacy := false
-	for !choselegacy {
-		fmt.Println("play the legacy edition? (Y/N)")
-		fmt.Scanln(&a)
-		switch a {
-		case "Y":
-			legacy = true
-			choselegacy = true
-		case "N":
+	displayenemysprite(2)
+	legacy := true
+	if len(os.Args) > 2 {
+		if os.Args[1] == "l" {
 			legacy = false
-			choselegacy = true
-
-		case "quit":
-			return
-		default:
-			fmt.Println("unknown command, try again")
 		}
 	}
+	displayenemysprite(5)
 	if legacy {
 		input := ""
 		player := characterCreation()
@@ -90,7 +79,7 @@ func menuHandler(command string, player *Character) {
 		case "train", "rain":
 			enemy := initGoblin()
 			trainingFight(player, &enemy)
-		
+
 		case "whoarethey":
 			fmt.Println("ABBA et spielberg")
 
@@ -121,7 +110,9 @@ func menuHandler(command string, player *Character) {
 
 	case 2: //shop
 		if buying {
-
+			if command == "close" {
+				buying = false
+			}
 			if shopinv[command] != 0 {
 				player.buyItem(command)
 				buying = false
@@ -145,8 +136,11 @@ func menuHandler(command string, player *Character) {
 
 	case 3: //forge
 		if forging {
-			if command == "stop" {
+			if command == "close" {
 				forging = false
+			}
+			if command == "list" {
+				fmt.Println(" - close : close out of here")
 			}
 			if forgelist[command] != 0 {
 				player.forgeItem(command)

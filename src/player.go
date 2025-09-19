@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+var spelldmg = map[string]int{"fireball": 18, "coupdepoing": 8}
+var spellprice = map[string]int{"fireball": 50, "coupdepoing": 10}
 var maxinvslots = 10
 
 type Character struct {
@@ -19,6 +21,10 @@ type Character struct {
 	skill []string
 	armor Equipment
 	atk   int
+	spd   int
+	exp   int
+	mananow int
+	manamax int
 }
 
 type Equipment struct {
@@ -46,29 +52,49 @@ func characterCreation() Character {
 
 	classchosen := false
 	health := 100
+	atk := 5
+	spd := 5
 	name = Capitalize(ToLower(name))
 
 	class := ""
 	for !classchosen {
-		fmt.Println("What is your species?? ( dwarf; human; elf)")
+		fmt.Println("What is your species?? ( dwarf; elf; human; revenant) (type info for race descriptions)")
 		fmt.Scanln(&class)
 		switch class {
+		case "info":
+			fmt.Println(asciiArtLettering("dwarf | human"))
+			fmt.Println("            more health, less speed                  |                        fully balanced character")
+			fmt.Print("\n")
+			fmt.Println(asciiArtLettering("elf | revenant"))
+			fmt.Println("  more attack, less health    |                                 more speed, less attack")
+			fmt.Print("\n")
 		case "human":
 			health = 100
+			atk = 5
+			spd = 5
 			classchosen = true
 		case "elf":
 			health = 80
+			atk = 8
+			spd = 5
 			classchosen = true
 		case "dwarf":
 			health = 120
+			atk = 5
+			spd = 3
+			classchosen = true
+		case "revenant":
+			health = 100
+			atk = 3
+			spd = 8
 			classchosen = true
 		default:
-			fmt.Println("what the fuck is that race I don't know it")
+			fmt.Println("this race does not exist yet... pick another ( dwarf; human; elf; revenant)")
 		}
 	}
 	fmt.Println("Very well " + name + " the " + class + "... Good luck")
 
-	return Character{name, class, 1, health, health / 2, 100, map[string]int{"potion": 3}, []string{"coupdepoing"}, Equipment{0, 0, 0}, 5}
+	return Character{name, class, 1, health, health / 2, 100, map[string]int{"potion": 3}, []string{"coupdepoing"}, Equipment{0, 0, 0}, atk, spd, 3,100,100}
 }
 func (chara *Character) getHealth() *int {
 	return &chara.hpnow
@@ -137,13 +163,13 @@ func (chara *Character) Useitem(item string) {
 		upgradeInventorySlot()
 	case "adventurers_hat":
 		chara.equiparmor("adventurers_hat")
-		removeitem(chara,"adventurers_hat")
+		removeitem(chara, "adventurers_hat")
 	case "adventurers_tunic":
 		chara.equiparmor("adventurers_tunic")
-		removeitem(chara,"adventurers_tunic")
+		removeitem(chara, "adventurers_tunic")
 	case "adventurers_boots":
 		chara.equiparmor("adventurers_boots")
-		removeitem(chara,"adventurers_boots")
+		removeitem(chara, "adventurers_boots")
 	case "inv_upgrade":
 		upgradeInventorySlot()
 	default:
@@ -167,8 +193,14 @@ func (chara *Character) takePot() {
 }
 
 func (chara *Character) Spellbook() {
-
+	for _, val := range chara.skill {
+		if val == "fireball" {
+			fmt.Println("you have learned this already, item removed :p")
+			return
+		}
+	}
 	chara.skill = append(chara.skill, "fireball")
+	fmt.Println("learned fireball!!!!")
 }
 
 func (chara *Character) equiparmor(item string) {
@@ -210,4 +242,56 @@ func Poisonpot(chara *Character) {
 	IsDead(chara)
 	time.Sleep(1 * time.Second)
 
+}
+
+func (chara *Character) experience(n int) {
+	if chara.exp+n > 10*chara.level {
+		chara.exp = chara.exp + n - 10*chara.level
+		chara.level++
+		switch chara.class {
+		case "human":
+			fmt.Print("LEVEL UP ! You are now level " + strconv.Itoa(chara.level) + "! (+1hp +1atk +1 spd)\n")
+			chara.atk++
+			chara.spd++
+			chara.hpmax++
+			chara.hpnow = chara.hpmax
+		case "dwarf":
+			fmt.Print("LEVEL UP ! You are now level " + strconv.Itoa(chara.level) + "! (+1atck +3hp ")
+			chara.atk++
+			chara.hpmax += 3
+			chara.hpnow = chara.hpmax
+
+			if chara.level%3 == 0 {
+				fmt.Print("+1 spd)")
+				chara.spd++
+			} else {
+				fmt.Print(")")
+			}
+		case "elf":
+			fmt.Print("LEVEL UP ! You are now level " + strconv.Itoa(chara.level) + "! (+3atk +1 spd")
+			chara.atk += 3
+			chara.spd++
+
+			if chara.level%3 == 0 {
+				fmt.Print("+1 hp)")
+				chara.hpmax++
+				chara.hpnow = chara.hpmax
+			} else {
+				chara.hpnow = chara.hpmax
+				fmt.Print(")")
+			}
+		case "revenant":
+			fmt.Print("LEVEL UP ! You are now level " + strconv.Itoa(chara.level) + "! (+3spd +1 hp")
+			chara.spd += 3
+			chara.hpmax++
+			chara.hpnow = chara.hpmax
+			if chara.level%3 == 0 {
+				fmt.Print("+1 atk)")
+				chara.atk++
+			} else {
+				fmt.Print(")")
+			}
+		}
+
+	}
 }
