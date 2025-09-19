@@ -222,7 +222,7 @@ func (chara *Character) GetInv() *map[string]int {
 }
 
 func (chara *Character) attack(enemy *Monster) {
-	enemy.hpnow -= 5
+	enemy.hpnow -= chara.atk
 	fmt.Println(chara.name + " deals " + strconv.Itoa(chara.atk) + " dmg to " + enemy.name)
 }
 

@@ -148,3 +148,13 @@ func (chara *Character) combatinv(enemy *Monster, actionbool *bool) {
 	}
 
 }
+
+//func initenemy() Monster {
+//max := 5
+//min := 1
+//randomInt := rand.Intn(max-min) + min
+
+//}
+//func quest(chara *Character) {
+
+//}
